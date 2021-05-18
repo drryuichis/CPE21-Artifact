@@ -1,0 +1,11 @@
+CC = nvcc
+CFLAGS = -O3 --ptxas-options=-v $(NVCCFLAGS)
+LDFLAGS = -lm
+
+C_SOURCES = $(wildcard targets/$(TARGET)/*.c) $(wildcard targets/cuda_common/*.c)
+DEVICE_SOURCES = $(wildcard targets/$(TARGET)/*.cu) $(wildcard targets/cuda_common/*.cu)
+
+DEVICE_OBJECTS=$(DEVICE_SOURCES:.cu=.o)
+
+%.o: %.cu
+	$(CC) $(CFLAGS) $(HPCTOOLKITFLAGS) -c $< -o $@

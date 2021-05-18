@@ -1,0 +1,11 @@
+CC = hipcc
+CFLAGS = -D__HIP_PLATFORM_HCC__ -D__HIP_ROCclr__ -O3 $(HIPCCFLAGS)
+LDFLAGS = -lm
+
+C_SOURCES = $(wildcard targets/$(TARGET)/*.c) $(wildcard targets/rocm_common/*.c)
+DEVICE_SOURCES = $(wildcard targets/$(TARGET)/*.hip) $(wildcard targets/rocm_common/*.hip)
+
+DEVICE_OBJECTS=$(DEVICE_SOURCES:.hip=.o)
+
+%.o: %.hip
+	$(CC) $(CFLAGS) $(HPCTOOLKITFLAGS) -c $< -o $@
